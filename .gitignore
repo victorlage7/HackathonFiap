@@ -131,3 +131,9 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+*.bin
+/Health&Med/.vs/Health&Med/v17/DocumentLayout.backup.json
+/Health&Med/.vs/Health&Med/v17/DocumentLayout.json
+*.vsidx
+/Health&Med/.vs/Health&Med/DesignTimeBuild/.dtbcache.v2
+/Health&Med/.vs/Health&Med/v17/.futdcache.v2
