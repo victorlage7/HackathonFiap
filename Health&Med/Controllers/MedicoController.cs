@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Health_Med.Model;
+using Health_Med.Repository.Interface;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Health_Med.Controllers
 {
@@ -8,36 +8,70 @@ namespace Health_Med.Controllers
     [ApiController]
     public class MedicoController : ControllerBase
     {
-        // GET: api/<MedicoController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IMedicoRepository _medicoRepository;
+
+        public MedicoController(IMedicoRepository medicoRepository)
         {
-            return new string[] { "value1", "value2" };
+            _medicoRepository = medicoRepository;
         }
 
-        // GET api/<MedicoController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> ObterPorId(int id)
         {
-            return "value";
+            var medico = await _medicoRepository.ObterPorIdAsync(id);
+            if (medico == null)
+                return NotFound();
+
+            return Ok(medico);
         }
 
-        // POST api/<MedicoController>
+        [HttpGet]
+        public async Task<IActionResult> ObterTodos()
+        {
+            var medicos = await _medicoRepository.ObterTodosAsync();
+            return Ok(medicos);
+        }
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Adicionar([FromBody] Medico medico)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var novoId = await _medicoRepository.AdicionarAsync(medico);
+            return CreatedAtAction(nameof(ObterPorId), new { id = novoId }, medico);
         }
 
-        // PUT api/<MedicoController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] Medico medico)
         {
+            if (id != medico.Id)
+                return BadRequest();
+
+            var existe = await _medicoRepository.ObterPorIdAsync(id);
+            if (existe == null)
+                return NotFound();
+
+            var atualizado = await _medicoRepository.AtualizarAsync(medico);
+            if (!atualizado)
+                return StatusCode(500, "Erro ao atualizar o médico.");
+
+            return NoContent();
         }
 
-        // DELETE api/<MedicoController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Remover(int id)
         {
+            var existe = await _medicoRepository.ObterPorIdAsync(id);
+            if (existe == null)
+                return NotFound();
+
+            var removido = await _medicoRepository.RemoverAsync(id);
+            if (!removido)
+                return StatusCode(500, "Erro ao remover o médico.");
+
+            return NoContent();
         }
+
     }
 }
