@@ -1,8 +1,9 @@
 ﻿using Dapper;
 using Health_Med.Model;
+using Health_Med.Repository.Interface;
 using System.Data;
 
-namespace Health_Med.Repository.Interface
+namespace Health_Med.Repository
 {
     public class MedicoRepository : IMedicoRepository
     {

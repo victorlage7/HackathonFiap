@@ -1,3 +1,4 @@
+using Health_Med.Repository;
 using Health_Med.Repository.Interface;
 using System.Data;
 using System.Data.SqlClient;
@@ -17,6 +18,9 @@ internal class Program
 
         // Adiciona o repositório MedicoRepository
         builder.Services.AddScoped<IMedicoRepository, MedicoRepository>();
+        builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
+        builder.Services.AddScoped<IHorarioDisponivelRepository, HorarioDisponivelRepository>();
+
 
         // Registrar a conexão com o banco de dados
         builder.Services.AddScoped<IDbConnection>(sp =>
