@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Health_Med.Repository.Interface;
 using Health_Med.Model;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -13,6 +14,7 @@ public class HorarioDisponivelController : ControllerBase
         _horarioRepository = horarioRepository;
     }
 
+    [Authorize(Roles = "Medico,Paciente")]
     [HttpGet("medico/{medicoId}")]
     public async Task<IActionResult> ObterPorMedico(int medicoId)
     {
@@ -20,6 +22,7 @@ public class HorarioDisponivelController : ControllerBase
         return Ok(horarios);
     }
 
+    [Authorize(Roles = "Medico")]
     [HttpPost]
     public async Task<IActionResult> Adicionar([FromBody] HorarioDisponivel horario)
     {
@@ -30,6 +33,7 @@ public class HorarioDisponivelController : ControllerBase
         return CreatedAtAction(nameof(ObterPorMedico), new { medicoId = horario.MedicoId }, horario);
     }
 
+    [Authorize(Roles = "Medico")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Remover(int id)
     {

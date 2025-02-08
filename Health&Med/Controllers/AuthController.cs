@@ -41,8 +41,8 @@ namespace Health_Med.Controllers
             else if (request.TipoUsuario == TipoUsuario.Paciente)
             {
                 var paciente = await _dbConnection.QueryFirstOrDefaultAsync<Paciente>(
-                    "SELECT * FROM Pacientes WHERE Email = @Login AND Senha = @Senha",
-                    new {CPF = request.Login, request.Senha });
+                    "SELECT * FROM Pacientes WHERE CPF = @Login AND Senha = @Senha",
+                    new {request.Login, request.Senha });
 
                 if (paciente == null)
                     return Unauthorized("Credenciais inválidas.");
