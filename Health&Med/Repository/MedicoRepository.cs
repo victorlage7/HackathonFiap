@@ -28,8 +28,8 @@ namespace Health_Med.Repository
 
         public async Task<int> AdicionarAsync(Medico medico)
         {
-            var query = @"INSERT INTO Medicos (Nome, CRM, Email, Senha, Especilidade) 
-                      VALUES (@Nome, @CRM, @Email, @Senha,@Especilidade);
+            var query = @"INSERT INTO Medicos (Nome, CRM, Email, Senha, Especilidade, ValorConsulta) 
+                      VALUES (@Nome, @CRM, @Email, @Senha,@Especilidade, @ValorConsulta);
                       SELECT CAST(SCOPE_IDENTITY() as int)";
             return await _dbConnection.ExecuteScalarAsync<int>(query, medico);
         }
@@ -41,7 +41,8 @@ namespace Health_Med.Repository
                       CRM = @CRM, 
                       Senha = @Senha,
                       Email = @Email,
-                      Especilidade = @Especilidade
+                      Especilidade = @Especilidade,
+                      ValorConsulta = @ValorConsulta
                       WHERE Id = @Id";
             var result = await _dbConnection.ExecuteAsync(query, medico);
             return result > 0;
