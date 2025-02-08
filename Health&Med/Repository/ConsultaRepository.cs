@@ -64,7 +64,7 @@ namespace Health_Med.Repository
         public async Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
         {
             var query = @"
-            SELECT c.Id, c.MedicoId, c.PacienteId, c.HorarioDisponivelid, c.Valor, c.Status, c.MotivoCancelamento,
+            SELECT c.*,
                    m.Nome AS NomeMedico, m.Especilidade, p.Nome AS NomePaciente
             FROM Consultas c
             INNER JOIN Medicos m ON c.MedicoId = m.Id
@@ -79,7 +79,7 @@ namespace Health_Med.Repository
                     consulta.Paciente = paciente;
                     return consulta;
                 },
-                new { Especialidade = especialidade.ToString() }, // Converte enum para string antes de enviar para SQL
+                new { Especialidade = especialidade }, // Converte enum para string antes de enviar para SQL
                 splitOn: "NomeMedico,NomePaciente"
             );
         }
