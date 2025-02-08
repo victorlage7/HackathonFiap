@@ -34,12 +34,30 @@ namespace Health_Med.Repository
             return await _dbConnection.ExecuteScalarAsync<int>(query, consulta);
         }
 
-        public async Task<bool> CancelarAsync(int id, string justificativa)
+        public async Task<bool> CancelarAsync(Consulta consulta)
         {
             var query = @"UPDATE Consultas 
-                          SET Status = 'Cancelada'
+                          SET Status = @Status,
+                          MedicoId = @MedicoId,
+                          PacienteId = @PacienteId,
+                          DataHora = @DataHora,
+                          Valor = @Valor
                           WHERE Id = @Id";
-            var result = await _dbConnection.ExecuteAsync(query, new { Id = id, Justificativa = justificativa });
+            var result = await _dbConnection.ExecuteAsync(query, consulta);
+            return result > 0;
+        }
+
+        public async Task<bool> AceitarAsync(Consulta consulta)
+        {
+            var query = @"UPDATE Consultas 
+                          SET Status = @Status,
+                          MedicoId = @MedicoId,
+                          PacienteId = @PacienteId,
+                          DataHora = @DataHora,
+                          Valor = @Valor
+                          WHERE Id = @Id";
+            var result = await _dbConnection.ExecuteAsync(query, consulta);
+
             return result > 0;
         }
     }

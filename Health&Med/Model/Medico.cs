@@ -1,4 +1,6 @@
-﻿namespace Health_Med.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Health_Med.Model
 {
     public class Medico
     {
@@ -13,7 +15,7 @@
         public string Senha { get; set; }
 
         public int CRM { get; set; }
-
+        [EnumDataType(typeof(Especilidade))]
         public Especilidade Especilidade { get; set; }
     }
 

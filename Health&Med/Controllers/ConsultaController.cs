@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Health_Med.Repository.Interface;
 using Health_Med.Model;
+using System.Drawing;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -47,8 +48,38 @@ public class ConsultaController : ControllerBase
         if (consulta == null)
             return NotFound();
 
-        var cancelado = await _consultaRepository.CancelarAsync(id, justificativa);
+        Consulta cancelarConsulta = new Consulta();
+        cancelarConsulta.Id = consulta.Id;
+        cancelarConsulta.MedicoId = consulta.MedicoId;
+        cancelarConsulta.PacienteId = consulta.PacienteId;
+        cancelarConsulta.DataHora = consulta.DataHora;
+        cancelarConsulta.Status = CosultaStatus.Confirmada;
+
+        var cancelado = await _consultaRepository.CancelarAsync(cancelarConsulta);
         if (!cancelado)
+            return StatusCode(500, "Erro ao cancelar a consulta.");
+
+        return NoContent();
+    }
+
+    [HttpPut("{id}/aceitar")]
+    public async Task<IActionResult> Aceitar(int id, double valor)
+    {
+        var consulta = await _consultaRepository.ObterPorIdAsync(id);
+        if (consulta == null)
+            return NotFound();
+
+        Consulta aceitarConsulta = new Consulta();
+        aceitarConsulta.Id = consulta.Id ;
+        aceitarConsulta.MedicoId = consulta.MedicoId;
+        aceitarConsulta.PacienteId = consulta.PacienteId;
+        aceitarConsulta.DataHora = consulta.DataHora;
+        aceitarConsulta.Status = CosultaStatus.Confirmada;
+        aceitarConsulta.Valor = valor;
+
+
+        var aceito = await _consultaRepository.AceitarAsync(aceitarConsulta);
+        if (!aceito)
             return StatusCode(500, "Erro ao cancelar a consulta.");
 
         return NoContent();

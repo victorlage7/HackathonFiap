@@ -7,6 +7,7 @@ namespace Health_Med.Repository.Interface
         Task<IEnumerable<Consulta>> ObterTodasAsync();
         Task<Consulta> ObterPorIdAsync(int id);
         Task<int> AgendarAsync(Consulta consulta);
-        Task<bool> CancelarAsync(int id, string justificativa);
+        Task<bool> CancelarAsync(Consulta consulta);
+        Task<bool> AceitarAsync(Consulta consulta);
     }
 }

@@ -2,11 +2,13 @@ using Health_Med.Repository;
 using Health_Med.Repository.Interface;
 using Health_Med.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Text.Json.Serialization;
 
 internal class Program
 {
@@ -25,6 +27,7 @@ internal class Program
         builder.Services.AddScoped<IMedicoRepository, MedicoRepository>();
         builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
         builder.Services.AddScoped<IHorarioDisponivelRepository, HorarioDisponivelRepository>();
+        builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
 
 
         // Configurar JWT
@@ -92,7 +95,7 @@ internal class Program
     });
         });
 
-
+        builder.Services.Configure<JsonOptions>(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
         // Registrar a conexão com o banco de dados
         builder.Services.AddScoped<IDbConnection>(sp =>
