@@ -61,6 +61,34 @@ public class HorarioDisponivelController : ControllerBase
     }
 
     [Authorize(Roles = "Medico")]
+    [HttpPut]
+    public async Task<IActionResult> Atualizar(int id, [FromBody] HorarioDisponivel horario)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var existe = await _horarioRepository.ObterPorIdAsync(id);
+
+        if (existe == null)
+            return NotFound();
+
+        HorarioDisponivel horarioDisponivel = new HorarioDisponivel();
+        horarioDisponivel.Disponivel = horario.Disponivel;
+        horarioDisponivel.DataHora = horario.DataHora;
+        horarioDisponivel.MedicoId = horario.MedicoId;
+        horarioDisponivel.Id = existe.Id;
+
+        
+
+        var atualizado = await _horarioRepository.AtualizarAsync(horarioDisponivel);
+        if (!atualizado)
+            return StatusCode(500, "Erro ao atualizar o Horario Disponivel.");
+
+        return NoContent();
+    }
+
+
+    [Authorize(Roles = "Medico")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Remover(int id)
     {

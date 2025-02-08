@@ -12,8 +12,10 @@ namespace Health_Med.VOs
             EmailMedico = Medico.Email;
             CRM =   Medico.CRM;
             EspecilidadeMedico = Medico.Especilidade;
+            HorarioDisponivelid = horarioDisponivel.Id;
         }
 
+        public int HorarioDisponivelid { get; set; }
         public bool Disponivel  { get; set; }
         public DateTime DataHora { get; set; }
         public string NomeMedico { get; set; }
