@@ -55,7 +55,7 @@ public class ConsultaController : ControllerBase
         consulta1.Paciente = paciente;
         consulta1.HorarioDisponivel = horario;
         consulta1.Status = consulta.Status;
-        consulta1.Valor = consulta.Valor;
+        consulta1.Valor = medico.ValorConsulta;
         consulta1.MotivoCancelamento = consulta.MotivoCancelamento;
 
         return Ok(consulta1);
@@ -120,13 +120,17 @@ public class ConsultaController : ControllerBase
         if (consulta == null)
             return NotFound();
 
+        var medico = await _medicoRepository.ObterPorIdAsync(consulta.MedicoId);
+        if (medico == null)
+            return BadRequest("Médico não exisate.");
+
         Consulta aceitarConsulta = new Consulta();
         aceitarConsulta.Id = consulta.Id;
         aceitarConsulta.MedicoId = consulta.MedicoId;
         aceitarConsulta.PacienteId = consulta.PacienteId;
         aceitarConsulta.HorarioDisponivelid = consulta.HorarioDisponivelid;
         aceitarConsulta.Status = CosultaStatus.Confirmada;
-        aceitarConsulta.Valor = valor;
+        aceitarConsulta.Valor = medico.ValorConsulta;
 
 
         var aceito = await _consultaRepository.AceitarAsync(aceitarConsulta);
