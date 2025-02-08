@@ -60,49 +60,7 @@ public class ConsultaController : ControllerBase
 
         return Ok(consulta1);
     }
-
-    [HttpGet("medico/especialidade/{especialidade}")]
-    public async Task<IActionResult> ObterPorEspecialidade(int especialidade)
-    {
-        var especialidadeEnum = (Especialidade)especialidade;
-
-        var consultas = await _consultaRepository.ObterConsultasPorEspecialidadeAsync(especialidadeEnum);
-        if (consultas == null)
-            return NotFound();
-
-        List<Consulta> consultasReturn = new List<Consulta>();
-
-        foreach (var item in consultas)
-        {
-            Consulta consulta = new Consulta();
-            Medico medico = new Medico();
-            Paciente paciente= new Paciente();
-            HorarioDisponivel horario = new HorarioDisponivel();
-
-            medico = await _medicoRepository.ObterPorIdAsync(item.MedicoId);
-            if (medico == null)
-                return BadRequest("Médico não exisate.");
-
-            paciente = await _pacienteRepository.ObterPorIdAsync(item.PacienteId);
-            if (paciente == null)
-                return BadRequest("Paciente não exisate.");
-
-            horario = await _horarioDisponivelRepository.ObterPorIdAsync(item.HorarioDisponivelid);
-            if (horario == null)
-                return BadRequest("Horário não exisate.");
-
-            consulta.Medico = medico;
-            consulta.Paciente = paciente;
-            consulta.HorarioDisponivel = horario;
-            consulta.Status = item.Status;
-            consulta.Valor = item.Valor;
-            consulta.MotivoCancelamento = item.MotivoCancelamento;
-
-            consultasReturn.Add(consulta);
-        }
-
-        return Ok(consultasReturn);
-    }
+   
 
     [HttpPost]
     public async Task<IActionResult> Agendar([FromBody] Consulta consulta)
