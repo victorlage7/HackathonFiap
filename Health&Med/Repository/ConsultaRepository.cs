@@ -55,34 +55,39 @@ namespace Health_Med.Repository
                           PacienteId = @PacienteId,
                           HorarioDisponivelid = @HorarioDisponivelid,
                           Valor = @Valor,
-                          MotivoCancelamento = ''
+                          MotivoCancelamento = null
                           WHERE Id = @Id";
             var result = await _dbConnection.ExecuteAsync(query, consulta);
 
             return result > 0;
         }
 
-        public async Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
+        public Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
         {
-            var query = @"
-            SELECT c.*,
-                   m.Nome AS NomeMedico, m.Especilidade, p.Nome AS NomePaciente
-            FROM Consultas c
-            INNER JOIN Medicos m ON c.MedicoId = m.Id
-            INNER JOIN Pacientes p ON c.PacienteId = p.Id
-            WHERE m.Especilidade = @Especialidade";
-
-            return await _dbConnection.QueryAsync<Consulta, Medico, Paciente, Consulta>(
-                query,
-                (consulta, medico, paciente) =>
-                {
-                    consulta.Medico = medico;
-                    consulta.Paciente = paciente;
-                    return consulta;
-                },
-                new { Especialidade = especialidade }, // Converte enum para string antes de enviar para SQL
-                splitOn: "NomeMedico,NomePaciente"
-            );
+            throw new NotImplementedException();
         }
+
+        //public async Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
+        //{
+        //    var query = @"
+        //    SELECT c.*,
+        //           m.Nome AS NomeMedico, m.Especilidade, p.Nome AS NomePaciente
+        //    FROM Consultas c
+        //    INNER JOIN Medicos m ON c.MedicoId = m.Id
+        //    LEFT JOIN Pacientes p ON c.PacienteId = p.Id
+        //    WHERE m.Especilidade = @Especialidade";
+
+        //    return await _dbConnection.QueryAsync<Consulta, Medico, Paciente, Consulta>(
+        //        query,
+        //        (consulta, medico, paciente) =>
+        //        {
+        //            consulta.Medico = medico;
+        //            consulta.Paciente = paciente;
+        //            return consulta;
+        //        },
+        //        new { Especialidade = especialidade },
+        //        splitOn: "NomeMedico,NomePaciente"
+        //    );
+        //}
     }
 }

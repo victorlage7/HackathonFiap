@@ -78,5 +78,17 @@ namespace Health_Med.Controllers
             return NoContent();
         }
 
+        //[Authorize(Roles = "Medico,Paciente")]
+        [HttpPost("{especialdiade}")]
+        public async Task<IActionResult> BuscarPorEspecialdiade(int especialdiade)
+        {
+            var medicos = await _medicoRepository.ObterPorEspecialdiadeAsync(especialdiade);
+
+            if (medicos == null)
+                return NotFound();
+
+            return Ok(medicos);
+        }
+
     }
 }

@@ -53,5 +53,11 @@ namespace Health_Med.Repository
             var result = await _dbConnection.ExecuteAsync(query, new { Id = id });
             return result > 0;
         }
+
+        public async Task<IEnumerable<Medico>> ObterPorEspecialdiadeAsync(int especialdiade)
+        {
+            var query = "SELECT * FROM Medicos where Especilidade = @Especilidade";
+            return await _dbConnection.QueryAsync<Medico>(query, new { Especilidade = especialdiade });
+        }
     }
 }

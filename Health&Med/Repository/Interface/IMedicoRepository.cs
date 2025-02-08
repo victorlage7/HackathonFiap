@@ -9,5 +9,6 @@ namespace Health_Med.Repository.Interface
         Task<int> AdicionarAsync(Medico medico);
         Task<bool> AtualizarAsync(Medico medico);
         Task<bool> RemoverAsync(int id);
+        Task<IEnumerable<Medico>> ObterPorEspecialdiadeAsync(int especialdiade);
     }
 }
