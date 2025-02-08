@@ -36,7 +36,8 @@ services:
           Nome NVARCHAR(100) NULL,
           Email NVARCHAR(100) UNIQUE NULL,
           Senha NVARCHAR(255) NOT NULL,
-          CRM INT NOT NULL
+          CRM INT NOT NULL,
+          Especilidade INT NOT NULL,
         );
         go
         CREATE TABLE Pacientes (

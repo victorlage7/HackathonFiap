@@ -11,7 +11,7 @@ namespace Health_Med.VOs
             NomeMedico = Medico.Nome;
             EmailMedico = Medico.Email;
             CRM =   Medico.CRM;
-            EspecilidadeMedico = Medico.especilidade;
+            EspecilidadeMedico = Medico.Especilidade;
         }
 
         public bool Disponivel  { get; set; }

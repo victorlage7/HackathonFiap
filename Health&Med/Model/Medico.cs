@@ -14,7 +14,7 @@
 
         public int CRM { get; set; }
 
-        public Especilidade especilidade { get; set; }
+        public Especilidade Especilidade { get; set; }
     }
 
     public enum Especilidade
