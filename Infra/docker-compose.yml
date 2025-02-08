@@ -48,22 +48,26 @@ services:
           CPF NVARCHAR(11) NOT NULL
         );
         go
-        CREATE TABLE Consultas (
-          Id INT PRIMARY KEY IDENTITY,
-          MedicoId INT NOT NULL,
-          PacienteId INT NOT NULL,
-          DataHora DATETIME NOT NULL,
-          Status NVARCHAR(50) NOT NULL,
-          FOREIGN KEY (MedicoId) REFERENCES Medicos(Id),
-          FOREIGN KEY (PacienteId) REFERENCES Pacientes(Id)
-        );
-        go
         CREATE TABLE HorariosDisponiveis (
           Id INT PRIMARY KEY IDENTITY,
           MedicoId INT NOT NULL,
           DataHora DATETIME NOT NULL,
           Disponivel BIT NOT NULL,
           FOREIGN KEY (MedicoId) REFERENCES Medicos(Id)
-        );"
+        );
+        go
+        CREATE TABLE Consultas (
+          Id INT PRIMARY KEY IDENTITY,
+          MedicoId INT NOT NULL,
+          PacienteId INT NOT NULL,
+          HorarioDisponivelid INT NOT NULL,
+          Status INT NOT NULL,
+          Valor DECIMAL NULL DEFAULT 0.0,
+          MotivoCancelamento VARCHAR(255) DEFAULT NULL,
+          FOREIGN KEY (MedicoId) REFERENCES Medicos(Id),
+          FOREIGN KEY (PacienteId) REFERENCES Pacientes(Id),
+          FOREIGN KEY (HorarioDisponivelid) REFERENCES HorariosDisponiveis(Id)
+        );
+        "
 volumes:
   sqlserver_data:

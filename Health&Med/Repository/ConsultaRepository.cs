@@ -28,8 +28,8 @@ namespace Health_Med.Repository
 
         public async Task<int> AgendarAsync(Consulta consulta)
         {
-            var query = @"INSERT INTO Consultas (MedicoId, PacienteId, DataHora) 
-                          VALUES (@MedicoId, @PacienteId, @DataHora, 'Agendada');
+            var query = @"INSERT INTO Consultas (MedicoId, PacienteId, HorarioDisponivelid,Status) 
+                          VALUES (@MedicoId, @PacienteId, @HorarioDisponivelid, 0);
                           SELECT CAST(SCOPE_IDENTITY() as int)";
             return await _dbConnection.ExecuteScalarAsync<int>(query, consulta);
         }
@@ -64,12 +64,12 @@ namespace Health_Med.Repository
         public async Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
         {
             var query = @"
-            SELECT c.Id, c.MedicoId, c.PacienteId, c.DataHora, c.Valor, c.Status, c.JustificativaCancelamento,
-                   m.Nome AS NomeMedico, m.Especialidade, p.Nome AS NomePaciente
+            SELECT c.Id, c.MedicoId, c.PacienteId, c.HorarioDisponivelid, c.Valor, c.Status, c.MotivoCancelamento,
+                   m.Nome AS NomeMedico, m.Especilidade, p.Nome AS NomePaciente
             FROM Consultas c
             INNER JOIN Medicos m ON c.MedicoId = m.Id
             INNER JOIN Pacientes p ON c.PacienteId = p.Id
-            WHERE m.Especialidade = @Especialidade";
+            WHERE m.Especilidade = @Especialidade";
 
             return await _dbConnection.QueryAsync<Consulta, Medico, Paciente, Consulta>(
                 query,

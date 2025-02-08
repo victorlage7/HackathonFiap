@@ -8,13 +8,15 @@ namespace Health_Med.Model
         public int Id { get; set; }
         public int MedicoId { get; set; }
         public int PacienteId { get; set; }
-        public DateTime DataHora { get; set; }
+        public int HorarioDisponivelid { get; set; }
+
         [EnumDataType(typeof(CosultaStatus))]
-        public CosultaStatus Status { get; set; }
-        public double Valor { get; set; }
-        public string MotivoCancelamento { get; set; }
-        public Medico Medico { get; set; }
-        public Paciente Paciente { get; set; }
+        public CosultaStatus? Status { get; set; }
+        public double? Valor { get; set; }
+        public string? MotivoCancelamento { get; set; }
+        public Medico? Medico { get; set; }
+        public Paciente? Paciente { get; set; }
+        public HorarioDisponivel? HorarioDisponivel { get; internal set; }
     }
 
     public enum CosultaStatus {

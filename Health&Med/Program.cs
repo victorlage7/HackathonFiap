@@ -74,11 +74,12 @@ internal class Program
             c.MapType<Especialidade>(() => new OpenApiSchema
             {
                 Type = "integer",
-                Enum = Enum.GetValues<Especialidade>()
-               .Cast<int>()
-               .Select(value => new OpenApiInteger(value))
-               .ToList<IOpenApiAny>()
+                Enum = Enum.GetValues(typeof(Especialidade))
+                          .Cast<int>()
+                          .Select(value => new OpenApiInteger(value))
+                          .ToList<IOpenApiAny>()
             });
+
 
             // Configuração para suporte a JWT no Swagger
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

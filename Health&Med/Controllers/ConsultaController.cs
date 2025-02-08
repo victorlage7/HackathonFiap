@@ -8,10 +8,16 @@ using System.Drawing;
 public class ConsultaController : ControllerBase
 {
     private readonly IConsultaRepository _consultaRepository;
+    private readonly IMedicoRepository _medicoRepository;
+    private readonly IPacienteRepository _pacienteRepository;
+    private readonly IHorarioDisponivelRepository _horarioDisponivelRepository;
 
-    public ConsultaController(IConsultaRepository consultaRepository)
+    public ConsultaController(IConsultaRepository consultaRepository, IMedicoRepository medicoRepository, IPacienteRepository pacienteRepository, IHorarioDisponivelRepository horarioDisponivelRepository)
     {
         _consultaRepository = consultaRepository;
+        _medicoRepository = medicoRepository;
+        _pacienteRepository = pacienteRepository;
+        _horarioDisponivelRepository = horarioDisponivelRepository;
     }
 
     [HttpGet]
@@ -32,9 +38,11 @@ public class ConsultaController : ControllerBase
     }
 
     [HttpGet("medico/especialidade/{especialidade}")]
-    public async Task<IActionResult> ObterPorEspecialidade(Especialidade especialidade)
+    public async Task<IActionResult> ObterPorEspecialidade(int especialidade)
     {
-        var consultas = await _consultaRepository.ObterConsultasPorEspecialidadeAsync(especialidade);
+        var especialidadeEnum = (Especialidade)especialidade;
+
+        var consultas = await _consultaRepository.ObterConsultasPorEspecialidadeAsync(especialidadeEnum);
         if (consultas == null)
             return NotFound();
 
@@ -47,8 +55,27 @@ public class ConsultaController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
+        var medico = await _medicoRepository.ObterPorIdAsync(consulta.MedicoId);
+        if (medico == null)
+            return BadRequest("Médico não exisate.");
+
+        var paciente = await _pacienteRepository.ObterPorIdAsync(consulta.PacienteId);
+        if (paciente == null)
+            return BadRequest("Paciente não exisate.");
+
+        var horario = await _horarioDisponivelRepository.ObterPorIdAsync(consulta.HorarioDisponivelid);
+        if (horario == null)
+            return BadRequest("Horário não exisate.");
+
         var novoId = await _consultaRepository.AgendarAsync(consulta);
-        return CreatedAtAction(nameof(ObterPorId), new { id = novoId }, consulta);
+
+        Consulta consulta1 = await _consultaRepository.ObterPorIdAsync(novoId);
+
+        consulta1.Medico = medico;
+        consulta1.Paciente = paciente;
+        consulta1.HorarioDisponivel = horario;
+
+        return Ok(consulta1);
     }
 
     [HttpPut("{id}/cancelar")]
@@ -62,7 +89,7 @@ public class ConsultaController : ControllerBase
         cancelarConsulta.Id = consulta.Id;
         cancelarConsulta.MedicoId = consulta.MedicoId;
         cancelarConsulta.PacienteId = consulta.PacienteId;
-        cancelarConsulta.DataHora = consulta.DataHora;
+        cancelarConsulta.HorarioDisponivelid = consulta.HorarioDisponivelid;
         cancelarConsulta.Status = CosultaStatus.Confirmada;
 
         var cancelado = await _consultaRepository.CancelarAsync(cancelarConsulta);
@@ -80,10 +107,10 @@ public class ConsultaController : ControllerBase
             return NotFound();
 
         Consulta aceitarConsulta = new Consulta();
-        aceitarConsulta.Id = consulta.Id ;
+        aceitarConsulta.Id = consulta.Id;
         aceitarConsulta.MedicoId = consulta.MedicoId;
         aceitarConsulta.PacienteId = consulta.PacienteId;
-        aceitarConsulta.DataHora = consulta.DataHora;
+        aceitarConsulta.HorarioDisponivelid = consulta.HorarioDisponivelid;
         aceitarConsulta.Status = CosultaStatus.Confirmada;
         aceitarConsulta.Valor = valor;
 
