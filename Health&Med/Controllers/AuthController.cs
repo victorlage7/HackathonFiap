@@ -45,16 +45,12 @@ namespace Health_Med.Controllers
 
                 if (request.Email is not null) {
 
-                    paciente = await _dbConnection.QueryFirstOrDefaultAsync<Paciente>(
-                    "SELECT * FROM Pacientes WHERE Email = @Email AND Senha = @Senha",
-                    new { request.Email, request.Senha });
+                    paciente = await _dbConnection.QueryFirstOrDefaultAsync<Paciente>("SELECT * FROM Pacientes WHERE Email = @Email AND Senha = @Senha",new { request.Email, request.Senha });
                 }
 
                 else if (request.Login is not null)
                 {
-                    paciente = await _dbConnection.QueryFirstOrDefaultAsync<Paciente>(
-                    "SELECT * FROM Pacientes WHERE CPF = @Login AND Senha = @Senha",
-                    new { request.Login, request.Senha });
+                    paciente = await _dbConnection.QueryFirstOrDefaultAsync<Paciente>("SELECT * FROM Pacientes WHERE CPF = @Login AND Senha = @Senha",new { request.Login, request.Senha });
                 }
 
                 if (paciente == null)

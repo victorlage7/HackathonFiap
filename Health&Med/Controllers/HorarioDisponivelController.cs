@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Health_Med.VOs;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]")] 
 public class HorarioDisponivelController : ControllerBase
 {
     private readonly IHorarioDisponivelRepository _horarioRepository;

@@ -16,7 +16,7 @@ namespace Health_Med.Controllers
             _medicoRepository = medicoRepository;
         }
 
-        [Authorize(Roles = "Medico")]
+        [Authorize(Roles = "Medico,Paciente")]
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterPorId(int id)
         {
@@ -27,7 +27,7 @@ namespace Health_Med.Controllers
             return Ok(medico);
         }
 
-        [Authorize(Roles = "Medico")]
+        [Authorize(Roles = "Medico,Paciente")]
         [HttpGet]
         public async Task<IActionResult> ObterTodos()
         {
@@ -78,7 +78,7 @@ namespace Health_Med.Controllers
             return NoContent();
         }
 
-        //[Authorize(Roles = "Medico,Paciente")]
+        [Authorize(Roles = "Medico,Paciente")]
         [HttpPost("{especialdiade}")]
         public async Task<IActionResult> BuscarPorEspecialdiade(int especialdiade)
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Health_Med.Model;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,6 +13,7 @@ public class PacienteController : ControllerBase
         _pacienteRepository = pacienteRepository;
     }
 
+    [Authorize(Roles = "Medico,Paciente")]
     [HttpGet]
     public async Task<IActionResult> ObterTodos()
     {
@@ -19,6 +21,7 @@ public class PacienteController : ControllerBase
         return Ok(pacientes);
     }
 
+    [Authorize(Roles = "Medico,Paciente")]
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorId(int id)
     {
@@ -39,6 +42,7 @@ public class PacienteController : ControllerBase
         return CreatedAtAction(nameof(ObterPorId), new { id = novoId }, paciente);
     }
 
+    [Authorize(Roles = "Paciente")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Atualizar(int id, [FromBody] Paciente paciente)
     {
@@ -56,6 +60,7 @@ public class PacienteController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Paciente")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Remover(int id)
     {

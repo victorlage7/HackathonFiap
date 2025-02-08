@@ -2,6 +2,7 @@
 using Health_Med.Repository.Interface;
 using Health_Med.Model;
 using System.Drawing;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -20,6 +21,7 @@ public class ConsultaController : ControllerBase
         _horarioDisponivelRepository = horarioDisponivelRepository;
     }
 
+    [Authorize(Roles = "Medico,Paciente")]
     [HttpGet]
     public async Task<IActionResult> ObterTodas()
     {
@@ -27,6 +29,7 @@ public class ConsultaController : ControllerBase
         return Ok(consultas);
     }
 
+    [Authorize(Roles = "Medico,Paciente")]
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorId(int id)
     {
@@ -60,8 +63,8 @@ public class ConsultaController : ControllerBase
 
         return Ok(consulta1);
     }
-   
 
+    [Authorize(Roles = "Paciente")]
     [HttpPost]
     public async Task<IActionResult> Agendar([FromBody] Consulta consulta)
     {
@@ -91,6 +94,7 @@ public class ConsultaController : ControllerBase
         return Ok(consulta1);
     }
 
+    [Authorize(Roles = "Medico,Paciente")]
     [HttpPut("{id}/cancelar")]
     public async Task<IActionResult> Cancelar(int id, [FromBody] string justificativa)
     {
@@ -113,6 +117,7 @@ public class ConsultaController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Medico")]
     [HttpPut("{id}/aceitar")]
     public async Task<IActionResult> Aceitar(int id, double valor)
     {
