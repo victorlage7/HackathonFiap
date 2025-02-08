@@ -13,5 +13,22 @@
         public string Senha { get; set; }
 
         public int CRM { get; set; }
+
+        public Especilidade especilidade { get; set; }
+    }
+
+    public enum Especilidade
+    {
+        Cardiologia=0,
+        Dermatologia=1,
+        Endocrinologia=2,
+        Ginecologia=3,
+        Neurologia=4,
+        Oftalmologia=5,
+        Ortopedia=6,
+        Pediatria=7,
+        Psiquiatria=8,
+        Reumatologia=9,
+        Urologia=10
     }
 }

@@ -2,6 +2,7 @@
 using Health_Med.Repository.Interface;
 using Health_Med.Model;
 using Microsoft.AspNetCore.Authorization;
+using Health_Med.VOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -9,17 +10,35 @@ public class HorarioDisponivelController : ControllerBase
 {
     private readonly IHorarioDisponivelRepository _horarioRepository;
 
-    public HorarioDisponivelController(IHorarioDisponivelRepository horarioRepository)
+    private readonly IMedicoRepository _medicoRepository;
+
+    public HorarioDisponivelController(IHorarioDisponivelRepository horarioRepository,IMedicoRepository medicoRepository)
     {
         _horarioRepository = horarioRepository;
+        _medicoRepository = medicoRepository;
     }
 
     [Authorize(Roles = "Medico,Paciente")]
     [HttpGet("medico/{medicoId}")]
     public async Task<IActionResult> ObterPorMedico(int medicoId)
     {
-        var horarios = await _horarioRepository.ObterPorMedicoAsync(medicoId);
-        return Ok(horarios);
+        try
+        {
+            Medico medico = await _medicoRepository.ObterPorIdAsync(medicoId);
+            var horarios = await _horarioRepository.ObterPorMedicoAsync(medicoId);
+
+            HorarioDisponivel horarioDisponivel = new HorarioDisponivel()
+            {
+                
+            };
+            HorarioDisponivelVO horarioDisponivelVO = new HorarioDisponivelVO(horarioDisponivel, medico);
+            return Ok(horarioDisponivelVO);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
     }
 
     [Authorize(Roles = "Medico")]
