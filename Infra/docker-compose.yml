@@ -38,6 +38,7 @@ services:
           Senha NVARCHAR(255) NOT NULL,
           CRM INT NOT NULL,
           Especilidade INT NOT NULL,
+          ValorConsulta DECIMAL NULL DEFAULT 0.0
         );
         go
         CREATE TABLE Pacientes (
@@ -66,7 +67,8 @@ services:
           MotivoCancelamento VARCHAR(255) DEFAULT NULL,
           FOREIGN KEY (MedicoId) REFERENCES Medicos(Id),
           FOREIGN KEY (PacienteId) REFERENCES Pacientes(Id),
-          FOREIGN KEY (HorarioDisponivelid) REFERENCES HorariosDisponiveis(Id)
+          FOREIGN KEY (HorarioDisponivelid) REFERENCES HorariosDisponiveis(Id),
+          CONSTRAINT HorariosDisponiveisUnique UNIQUE (MedicoId, HorarioDisponivelid)
         );
         "
 volumes:
