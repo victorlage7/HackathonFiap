@@ -64,7 +64,7 @@ internal class Program
                 Contact = new OpenApiContact
                 {
                     Name = "Hackathon FIAP",
-                    Email = "contato@hackathonfiap.com"
+                    Email = "victorlage7@gmail.com"
                 }
             });
 
