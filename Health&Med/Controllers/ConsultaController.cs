@@ -33,8 +33,32 @@ public class ConsultaController : ControllerBase
         var consulta = await _consultaRepository.ObterPorIdAsync(id);
         if (consulta == null)
             return NotFound();
+       
+        Consulta consulta1 = new Consulta();
+        Medico medico = new Medico();
+        Paciente paciente = new Paciente();
+        HorarioDisponivel horario = new HorarioDisponivel();
 
-        return Ok(consulta);
+        medico = await _medicoRepository.ObterPorIdAsync(consulta.MedicoId);
+        if (medico == null)
+            return BadRequest("Médico não exisate.");
+
+        paciente = await _pacienteRepository.ObterPorIdAsync(consulta.PacienteId);
+        if (paciente == null)
+            return BadRequest("Paciente não exisate.");
+
+        horario = await _horarioDisponivelRepository.ObterPorIdAsync(consulta.HorarioDisponivelid);
+        if (horario == null)
+            return BadRequest("Horário não exisate.");
+
+        consulta1.Medico = medico;
+        consulta1.Paciente = paciente;
+        consulta1.HorarioDisponivel = horario;
+        consulta1.Status = consulta.Status;
+        consulta1.Valor = consulta.Valor;
+        consulta1.MotivoCancelamento = consulta.MotivoCancelamento;
+
+        return Ok(consulta1);
     }
 
     [HttpGet("medico/especialidade/{especialidade}")]
@@ -121,7 +145,8 @@ public class ConsultaController : ControllerBase
         cancelarConsulta.MedicoId = consulta.MedicoId;
         cancelarConsulta.PacienteId = consulta.PacienteId;
         cancelarConsulta.HorarioDisponivelid = consulta.HorarioDisponivelid;
-        cancelarConsulta.Status = CosultaStatus.Confirmada;
+        cancelarConsulta.Status = CosultaStatus.Cancelada;
+        cancelarConsulta.MotivoCancelamento = justificativa;
 
         var cancelado = await _consultaRepository.CancelarAsync(cancelarConsulta);
         if (!cancelado)

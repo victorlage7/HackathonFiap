@@ -40,8 +40,8 @@ namespace Health_Med.Repository
                           SET Status = @Status,
                           MedicoId = @MedicoId,
                           PacienteId = @PacienteId,
-                          DataHora = @DataHora,
-                          Valor = @Valor
+                          HorarioDisponivelid = @HorarioDisponivelid,
+                          MotivoCancelamento = @MotivoCancelamento
                           WHERE Id = @Id";
             var result = await _dbConnection.ExecuteAsync(query, consulta);
             return result > 0;
@@ -50,11 +50,12 @@ namespace Health_Med.Repository
         public async Task<bool> AceitarAsync(Consulta consulta)
         {
             var query = @"UPDATE Consultas 
-                          SET Status = @Status,
+                         SET Status = @Status,
                           MedicoId = @MedicoId,
                           PacienteId = @PacienteId,
-                          DataHora = @DataHora,
-                          Valor = @Valor
+                          HorarioDisponivelid = @HorarioDisponivelid,
+                          Valor = @Valor,
+                          MotivoCancelamento = ''
                           WHERE Id = @Id";
             var result = await _dbConnection.ExecuteAsync(query, consulta);
 
