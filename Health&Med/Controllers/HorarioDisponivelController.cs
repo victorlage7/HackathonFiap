@@ -26,17 +26,25 @@ public class HorarioDisponivelController : ControllerBase
         {
             Medico medico = await _medicoRepository.ObterPorIdAsync(medicoId);
             var horarios = await _horarioRepository.ObterPorMedicoAsync(medicoId);
+            
+            List<HorarioDisponivelVO> listHorarioDisponivelVO = new List<HorarioDisponivelVO>();
 
-            HorarioDisponivel horarioDisponivel = new HorarioDisponivel()
+            foreach (var item in horarios)
             {
-                
-            };
-            HorarioDisponivelVO horarioDisponivelVO = new HorarioDisponivelVO(horarioDisponivel, medico);
-            return Ok(horarioDisponivelVO);
+                HorarioDisponivel horarioDisponivel = new HorarioDisponivel()
+                {
+                     DataHora = item.DataHora
+                    ,Disponivel = item.Disponivel
+                    ,Id = item.Id
+                    ,MedicoId = item.MedicoId
+                };
+                listHorarioDisponivelVO.Add(new HorarioDisponivelVO(horarioDisponivel, medico));
+            } 
+            
+            return Ok(listHorarioDisponivelVO);
         }
         catch (Exception)
         {
-
             throw;
         }
     }
