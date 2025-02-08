@@ -1,14 +1,13 @@
 using Health_Med.Repository;
 using Health_Med.Repository.Interface;
 using Health_Med.Services;
+using Health_Med.Swagger.Health_Med.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
-using System.Text.Json.Serialization;
 
 internal class Program
 {
@@ -68,6 +67,8 @@ internal class Program
                 }
             });
 
+            c.SchemaFilter<EnumSchemaFilter>();
+
             // Configuração para suporte a JWT no Swagger
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
@@ -94,8 +95,6 @@ internal class Program
         }
     });
         });
-
-        builder.Services.Configure<JsonOptions>(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
         // Registrar a conexão com o banco de dados
         builder.Services.AddScoped<IDbConnection>(sp =>
