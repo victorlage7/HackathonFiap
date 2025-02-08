@@ -15,11 +15,11 @@ namespace Health_Med.Model
         public string Senha { get; set; }
 
         public int CRM { get; set; }
-        [EnumDataType(typeof(Especilidade))]
-        public Especilidade Especilidade { get; set; }
+        [EnumDataType(typeof(Especialidade))]
+        public Especialidade Especilidade { get; set; }
     }
 
-    public enum Especilidade
+    public enum Especialidade
     {
         Cardiologia=0,
         Dermatologia=1,

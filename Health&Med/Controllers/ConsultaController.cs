@@ -31,6 +31,16 @@ public class ConsultaController : ControllerBase
         return Ok(consulta);
     }
 
+    [HttpGet("medico/especialidade/{especialidade}")]
+    public async Task<IActionResult> ObterPorEspecialidade(Especialidade especialidade)
+    {
+        var consultas = await _consultaRepository.ObterConsultasPorEspecialidadeAsync(especialidade);
+        if (consultas == null)
+            return NotFound();
+
+        return Ok(consultas);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Agendar([FromBody] Consulta consulta)
     {

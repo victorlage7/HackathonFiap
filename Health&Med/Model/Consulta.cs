@@ -13,6 +13,8 @@ namespace Health_Med.Model
         public CosultaStatus Status { get; set; }
         public double Valor { get; set; }
         public string MotivoCancelamento { get; set; }
+        public Medico Medico { get; set; }
+        public Paciente Paciente { get; set; }
     }
 
     public enum CosultaStatus {

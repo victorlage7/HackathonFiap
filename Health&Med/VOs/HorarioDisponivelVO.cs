@@ -21,6 +21,6 @@ namespace Health_Med.VOs
         public string NomeMedico { get; set; }
         public string EmailMedico { get; set; }
         public int CRM { get; set; }
-        public Especilidade EspecilidadeMedico { get; set; }
+        public Especialidade EspecilidadeMedico { get; set; }
     }
 }

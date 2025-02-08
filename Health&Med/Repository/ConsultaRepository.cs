@@ -60,5 +60,28 @@ namespace Health_Med.Repository
 
             return result > 0;
         }
+
+        public async Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
+        {
+            var query = @"
+            SELECT c.Id, c.MedicoId, c.PacienteId, c.DataHora, c.Valor, c.Status, c.JustificativaCancelamento,
+                   m.Nome AS NomeMedico, m.Especialidade, p.Nome AS NomePaciente
+            FROM Consultas c
+            INNER JOIN Medicos m ON c.MedicoId = m.Id
+            INNER JOIN Pacientes p ON c.PacienteId = p.Id
+            WHERE m.Especialidade = @Especialidade";
+
+            return await _dbConnection.QueryAsync<Consulta, Medico, Paciente, Consulta>(
+                query,
+                (consulta, medico, paciente) =>
+                {
+                    consulta.Medico = medico;
+                    consulta.Paciente = paciente;
+                    return consulta;
+                },
+                new { Especialidade = especialidade.ToString() }, // Converte enum para string antes de enviar para SQL
+                splitOn: "NomeMedico,NomePaciente"
+            );
+        }
     }
 }

@@ -1,9 +1,11 @@
+using Health_Med.Model;
 using Health_Med.Repository;
 using Health_Med.Repository.Interface;
 using Health_Med.Services;
 using Health_Med.Swagger.Health_Med.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
@@ -68,6 +70,15 @@ internal class Program
             });
 
             c.SchemaFilter<EnumSchemaFilter>();
+
+            c.MapType<Especialidade>(() => new OpenApiSchema
+            {
+                Type = "integer",
+                Enum = Enum.GetValues<Especialidade>()
+               .Cast<int>()
+               .Select(value => new OpenApiInteger(value))
+               .ToList<IOpenApiAny>()
+            });
 
             // Configuração para suporte a JWT no Swagger
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
