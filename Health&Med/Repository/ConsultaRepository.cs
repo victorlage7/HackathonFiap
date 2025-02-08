@@ -62,32 +62,5 @@ namespace Health_Med.Repository
             return result > 0;
         }
 
-        public Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public async Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade)
-        //{
-        //    var query = @"
-        //    SELECT c.*,
-        //           m.Nome AS NomeMedico, m.Especilidade, p.Nome AS NomePaciente
-        //    FROM Consultas c
-        //    INNER JOIN Medicos m ON c.MedicoId = m.Id
-        //    LEFT JOIN Pacientes p ON c.PacienteId = p.Id
-        //    WHERE m.Especilidade = @Especialidade";
-
-        //    return await _dbConnection.QueryAsync<Consulta, Medico, Paciente, Consulta>(
-        //        query,
-        //        (consulta, medico, paciente) =>
-        //        {
-        //            consulta.Medico = medico;
-        //            consulta.Paciente = paciente;
-        //            return consulta;
-        //        },
-        //        new { Especialidade = especialidade },
-        //        splitOn: "NomeMedico,NomePaciente"
-        //    );
-        //}
     }
 }

@@ -9,6 +9,5 @@ namespace Health_Med.Repository.Interface
         Task<int> AgendarAsync(Consulta consulta);
         Task<bool> CancelarAsync(Consulta consulta);
         Task<bool> AceitarAsync(Consulta consulta);
-        Task<IEnumerable<Consulta>> ObterConsultasPorEspecialidadeAsync(Especialidade especialidade);
     }
 }
