@@ -16,7 +16,7 @@ namespace Health_Med.Controllers
             _medicoRepository = medicoRepository;
         }
 
-        [Authorize(Roles = "Medico")]
+        [Authorize(Roles = "Medico,Paciente")]
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterPorId(int id)
         {
@@ -27,7 +27,7 @@ namespace Health_Med.Controllers
             return Ok(medico);
         }
 
-        [Authorize(Roles = "Medico")]
+        [Authorize(Roles = "Medico,Paciente")]
         [HttpGet]
         public async Task<IActionResult> ObterTodos()
         {
@@ -76,6 +76,18 @@ namespace Health_Med.Controllers
                 return StatusCode(500, "Erro ao remover o médico.");
 
             return NoContent();
+        }
+
+        [Authorize(Roles = "Medico,Paciente")]
+        [HttpPost("{especialdiade}")]
+        public async Task<IActionResult> BuscarPorEspecialdiade(int especialdiade)
+        {
+            var medicos = await _medicoRepository.ObterPorEspecialdiadeAsync(especialdiade);
+
+            if (medicos == null)
+                return NotFound();
+
+            return Ok(medicos);
         }
 
     }

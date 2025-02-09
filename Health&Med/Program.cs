@@ -1,8 +1,11 @@
+using Health_Med.Model;
 using Health_Med.Repository;
 using Health_Med.Repository.Interface;
 using Health_Med.Services;
+using Health_Med.Swagger.Health_Med.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
@@ -25,6 +28,7 @@ internal class Program
         builder.Services.AddScoped<IMedicoRepository, MedicoRepository>();
         builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
         builder.Services.AddScoped<IHorarioDisponivelRepository, HorarioDisponivelRepository>();
+        builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
 
 
         // Configurar JWT
@@ -61,9 +65,21 @@ internal class Program
                 Contact = new OpenApiContact
                 {
                     Name = "Hackathon FIAP",
-                    Email = "contato@hackathonfiap.com"
+                    Email = "victorlage7@gmail.com"
                 }
             });
+
+            c.SchemaFilter<EnumSchemaFilter>();
+
+            c.MapType<Especialidade>(() => new OpenApiSchema
+            {
+                Type = "integer",
+                Enum = Enum.GetValues(typeof(Especialidade))
+                          .Cast<int>()
+                          .Select(value => new OpenApiInteger(value))
+                          .ToList<IOpenApiAny>()
+            });
+
 
             // Configuração para suporte a JWT no Swagger
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -91,8 +107,6 @@ internal class Program
         }
     });
         });
-
-
 
         // Registrar a conexão com o banco de dados
         builder.Services.AddScoped<IDbConnection>(sp =>

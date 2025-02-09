@@ -34,5 +34,23 @@ namespace Health_Med.Repository
             var result = await _dbConnection.ExecuteAsync(query, new { Id = id });
             return result > 0;
         }
+
+        public async Task<HorarioDisponivel> ObterPorIdAsync(int id)
+        {
+            var query = "SELECT * FROM HorariosDisponiveis WHERE Id = @Id";
+            return await _dbConnection.QueryFirstOrDefaultAsync<HorarioDisponivel>(query, new { Id = id });
+        }
+
+        public async Task<bool> AtualizarAsync( HorarioDisponivel horarioDisponivel)
+        {
+            var query = @"UPDATE HorariosDisponiveis SET 
+                      MedicoId = @MedicoId,
+                      DataHora = @DataHora,
+                      Disponivel = @Disponivel
+                      WHERE Id = @Id";
+            var result = await _dbConnection.ExecuteAsync(query, horarioDisponivel);
+
+            return result > 0;
+        }
     }
 }

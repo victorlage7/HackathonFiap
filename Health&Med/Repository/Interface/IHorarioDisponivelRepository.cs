@@ -7,5 +7,7 @@ namespace Health_Med.Repository.Interface
         Task<IEnumerable<HorarioDisponivel>> ObterPorMedicoAsync(int medicoId);
         Task<int> AdicionarAsync(HorarioDisponivel horario);
         Task<bool> RemoverAsync(int id);
+        Task<HorarioDisponivel> ObterPorIdAsync(int id);
+        Task<bool> AtualizarAsync(HorarioDisponivel horario);
     }
 }
